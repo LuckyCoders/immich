@@ -7,6 +7,7 @@ on:
     paths:
       - 'mobile/**'
       - '.github/workflows/build-apk-fork.yml'
+      - 'i18n/**'
 
 concurrency:
   group: build-apk-fork-${{ github.ref }}
@@ -44,13 +45,20 @@ jobs:
         working-directory: mobile
         run: flutter pub get
 
+      - name: Generate translations
+        working-directory: mobile
+        run: |
+          dart run easy_localization:generate -S ../i18n
+          dart run bin/generate_keys.dart
+          dart format lib/generated/ || true
+
       - name: Generate pigeon APIs
         working-directory: mobile
         run: |
-          if ls pigeon/*.dart >/dev/null 2>&1; then
-            for f in pigeon/*.dart; do dart run pigeon --input "$f"; done
-            dart format lib/platform/ || true
-          fi
+          for f in pigeon/*.dart; do
+            dart run pigeon --input "$f"
+          done
+          dart format lib/platform/ || true
 
       - name: Generate Drift / build_runner
         working-directory: mobile
