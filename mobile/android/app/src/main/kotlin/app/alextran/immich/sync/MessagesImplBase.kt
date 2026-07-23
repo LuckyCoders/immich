@@ -174,11 +174,14 @@ open class NativeSyncApiImplBase(context: Context) : ImmichPlugin(), ActivityAwa
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> 2L
             else -> 0L
           }
-          // Date taken is milliseconds since epoch, Date added is seconds since epoch
-          val createdAt = (c.getLong(dateTakenColumn).takeIf { it > 0 }?.div(1000))
-            ?: c.getLong(dateAddedColumn)
+          // Date taken is milliseconds since epoch, Date added/modified are seconds.
+          // Cursor.getLong() returns 0 for NULL ??? treat 0 as missing, never persist epoch-0.
+          val createdAt = c.getLong(dateTakenColumn).takeIf { it > 0 }?.div(1000)
+            ?: c.getLong(dateAddedColumn).takeIf { it > 0 }
+            ?: c.getLong(dateModifiedColumn).takeIf { it > 0 }
+            ?: (System.currentTimeMillis() / 1000)
           // Date modified is seconds since epoch
-          val modifiedAt = c.getLong(dateModifiedColumn)
+          val modifiedAt = c.getLong(dateModifiedColumn).takeIf { it > 0 } ?: createdAt
           val width = c.getInt(widthColumn).toLong()
           val height = c.getInt(heightColumn).toLong()
           // Duration is milliseconds
