@@ -31,10 +31,13 @@ Related upstream comment: [immich#3338](https://github.com/immich-app/immich/dis
 | Status | Feature | Notes |
 |--------|---------|-------|
 | In progress / partial | Null `bucket_date` + personal APK | Photos tab crash fix; build via Actions |
-| Upstream PR | Widget / asset deep-link L/R | [immich#30156](https://github.com/immich-app/immich/pull/30156) |
+| Upstream PR (open) | Widget / asset deep-link L/R | [immich#30156](https://github.com/immich-app/immich/pull/30156) |
+| Upstream PRs (closed) | Chunked upload, metadata retry, security, album limits | [immich#26026](https://github.com/immich-app/immich/pull/26026), [#24338](https://github.com/immich-app/immich/pull/24338), [#23892](https://github.com/immich-app/immich/pull/23892), [#23887](https://github.com/immich-app/immich/pull/23887) |
 | Proposed upstream | Screenshots collection + hide from timeline | Comment on [immich#14449](https://github.com/immich-app/immich/discussions/14449) |
 | Proposed upstream | Mobile: Merge people UI | [immich#30154](https://github.com/immich-app/immich/discussions/30154) |
 | Later | Mobile merge people implementation | API already exists; app UI pending |
+
+See also the contribution tables in [README.md](./README.md) (upstream PRs, fork PRs, key commits).
 
 ## Out of scope here
 

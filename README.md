@@ -12,15 +12,51 @@ Upstream maintainers **intentionally do not ship** built-in stronger login and p
 
 Full plan: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**.
 
-### Fork plans / work
+### Pull requests sent upstream ([immich-app/immich](https://github.com/immich-app/immich))
 
-| Status | Item | Links |
-|--------|------|-------|
-| Planned | TOTP + Passkeys (built-in MFA) | [FORK_ROADMAP](./FORK_ROADMAP.md), comment on [upstream #3338](https://github.com/immich-app/immich/discussions/3338#discussioncomment-17764669) |
-| Upstream PR | Widget / deep-link: swipe L/R from the timeline | [immich#30156](https://github.com/immich-app/immich/pull/30156) |
-| Proposed upstream | Screenshots: detect + hide from timeline + collection | [immich#14449](https://github.com/immich-app/immich/discussions/14449) |
-| Proposed upstream | Mobile: Merge people UI | [immich#30154](https://github.com/immich-app/immich/discussions/30154) |
-| Partial | Null `bucket_date` crash + personal APK | branch `build/personal-apk-widget-nullbucket` |
+| PR | Feature / work | State |
+|----|----------------|-------|
+| [#30156](https://github.com/immich-app/immich/pull/30156) | **Widget / asset deep-link** — open main timeline so L/R swipe works (`Fixes #20289`) | Open |
+| [#26026](https://github.com/immich-app/immich/pull/26026) | **Chunked upload** — bypass Cloudflare / reverse-proxy 100MB `413` limit | Closed |
+| [#24338](https://github.com/immich-app/immich/pull/24338) | **Metadata retry** for cloud storage | Closed |
+| [#23892](https://github.com/immich-app/immich/pull/23892) | **Security enhancements** | Closed |
+| [#23887](https://github.com/immich-app/immich/pull/23887) | **Album management** and file upload limits | Closed |
+
+### Upstream discussions opened
+
+| Discussion | Topic |
+|------------|-------|
+| [#30154](https://github.com/immich-app/immich/discussions/30154) | Mobile: Merge people UI (API already exists) |
+| [#26029](https://github.com/immich-app/immich/discussions/26029) | Integrity Files Health Check / stuck assets dashboard |
+| Comment on [#3338](https://github.com/immich-app/immich/discussions/3338#discussioncomment-17764669) | +1 for TOTP + Passkeys / WebAuthn |
+| Comment on [#14449](https://github.com/immich-app/immich/discussions/14449) | Screenshots collection + hide from timeline |
+
+### Fork PRs (merged into this repo)
+
+| PR | Feature / work | Merge |
+|----|----------------|-------|
+| [#5](https://github.com/LuckyCoders/immich/pull/5) | Chunked upload (Cloudflare / proxy limits) | `491ed62` |
+| [#4](https://github.com/LuckyCoders/immich/pull/4) | Metadata retry for cloud storage | `fae9231` |
+| [#3](https://github.com/LuckyCoders/immich/pull/3) | Security audit, fixes, docs | `0826b9b` |
+| [#2](https://github.com/LuckyCoders/immich/pull/2) / [#1](https://github.com/LuckyCoders/immich/pull/1) | Album management and file upload limits | `de35c0d` / `41d4482` |
+
+### Key commits by feature (this fork)
+
+| Feature | Commits / branches |
+|---------|-------------------|
+| Widget deep-link L/R | [`2af5c34`](https://github.com/LuckyCoders/immich/commit/2af5c34ed) — branch [`fix/mobile-asset-deeplink-timeline-nav`](https://github.com/LuckyCoders/immich/tree/fix/mobile-asset-deeplink-timeline-nav) |
+| Null `bucket_date` Photos crash | [`444d4a6`](https://github.com/LuckyCoders/immich/commit/444d4a6d4), [`3b00b81`](https://github.com/LuckyCoders/immich/commit/3b00b817f), [`b5a864f`](https://github.com/LuckyCoders/immich/commit/b5a864f66) — branch [`fix/null-bucket-date-apk`](https://github.com/LuckyCoders/immich/tree/fix/null-bucket-date-apk) |
+| Personal APK (widget + null-bucket) | [`c16b233`](https://github.com/LuckyCoders/immich/commit/c16b233d2) — branch [`build/personal-apk-widget-nullbucket`](https://github.com/LuckyCoders/immich/tree/build/personal-apk-widget-nullbucket) |
+| Chunked upload | [`ae63b0f`](https://github.com/LuckyCoders/immich/commit/ae63b0fbb) (via fork PR #5) |
+| Fork roadmap / README | [`6a42634`](https://github.com/LuckyCoders/immich/commit/6a42634c2) … [`4aec99a`](https://github.com/LuckyCoders/immich/commit/4aec99a6e) |
+
+### Planned (not implemented yet)
+
+| Item | Notes |
+|------|-------|
+| TOTP + Passkeys (built-in MFA) | See [FORK_ROADMAP](./FORK_ROADMAP.md) |
+| Screenshots detect / hide / collection | Proposed on upstream [#14449](https://github.com/immich-app/immich/discussions/14449) |
+| Mobile Merge people UI | Proposed on upstream [#30154](https://github.com/immich-app/immich/discussions/30154) |
 
 Below is the original Immich README (upstream docs and features).
 
