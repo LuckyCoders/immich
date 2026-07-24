@@ -64,6 +64,7 @@ Below is the original Immich README (upstream docs and features).
 
 
 ---
+
 <p align="center"> 
   <br/>
   <a href="https://opensource.org/license/agpl-v3"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg?color=3F51B5&style=for-the-badge&label=License&logoColor=000000&labelColor=ececec" alt="License: AGPLv3"></a>
@@ -78,10 +79,7 @@ Below is the original Immich README (upstream docs and features).
 <img src="design/immich-logo-stacked-light.svg" width="300" title="Login With Custom URL">
 </p>
 <h3 align="center">High performance self-hosted photo and video management solution</h3>
-
-
----
-
+<br/>
 <a href="https://immich.app">
 <img src="design/immich-screenshots.png" title="Main Screenshot">
 </a>
@@ -101,15 +99,20 @@ Below is the original Immich README (upstream docs and features).
   <a href="readme_i18n/README_zh_TW.md">正體中文</a>
   <a href="readme_i18n/README_uk_UA.md">Українська</a>
   <a href="readme_i18n/README_ru_RU.md">Русский</a>
+  <a href="readme_i18n/README_bg_BG.md">Български</a>
   <a href="readme_i18n/README_pt_BR.md">Português Brasileiro</a>
   <a href="readme_i18n/README_sv_SE.md">Svenska</a>
   <a href="readme_i18n/README_ar_JO.md">العربية</a>
   <a href="readme_i18n/README_vi_VN.md">Tiếng Việt</a>
   <a href="readme_i18n/README_th_TH.md">ภาษาไทย</a>
+  <a href="readme_i18n/README_ml_IN.md">മലയാളം</a>
 </p>
+
 
 > [!WARNING]
 > ⚠️ Always follow [3-2-1](https://www.backblaze.com/blog/the-3-2-1-backup-strategy/) backup plan for your precious photos and videos!
+> 
+ 
 
 > [!NOTE]
 > You can find the main documentation, including installation guides, at https://immich.app/.
@@ -120,7 +123,6 @@ Below is the original Immich README (upstream docs and features).
 - [About](https://docs.immich.app/overview/introduction)
 - [Installation](https://docs.immich.app/install/requirements)
 - [Roadmap](https://immich.app/roadmap)
-- [Fork roadmap](./FORK_ROADMAP.md)
 - [Demo](#demo)
 - [Features](#features)
 - [Translations](https://docs.immich.app/developer/translations)

@@ -2,10 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:immich_mobile/extensions/build_context_extensions.dart';
+import 'package:immich_mobile/extensions/translate_extensions.dart';
 import 'package:immich_mobile/presentation/widgets/action_buttons/base_action_button.widget.dart';
 import 'package:immich_mobile/presentation/widgets/action_buttons/unarchive_action_button.widget.dart';
-import 'package:immich_mobile/providers/infrastructure/asset_viewer/current_asset.provider.dart';
+import 'package:immich_mobile/providers/asset_viewer/asset_viewer.provider.dart';
 import 'package:immich_mobile/presentation/widgets/album/album_selector.widget.dart';
+import 'package:immich_mobile/providers/infrastructure/action.provider.dart';
 import 'package:immich_mobile/providers/infrastructure/album.provider.dart';
 import 'package:immich_mobile/providers/routes.provider.dart';
 import 'package:immich_mobile/widgets/common/immich_toast.dart';
@@ -49,8 +51,10 @@ class _AddActionButtonState extends ConsumerState<AddActionButton> {
   }
 
   List<Widget> _buildMenuChildren() {
-    final asset = ref.read(currentAssetNotifier);
-    if (asset == null) return [];
+    final asset = ref.read(assetViewerProvider).currentAsset;
+    if (asset == null) {
+      return [];
+    }
 
     final user = ref.read(currentUserProvider);
     final isOwner = asset is RemoteAsset && asset.ownerId == user?.id;
@@ -103,7 +107,7 @@ class _AddActionButtonState extends ConsumerState<AddActionButton> {
   }
 
   void _openAlbumSelector() {
-    final currentAsset = ref.read(currentAssetNotifier);
+    final currentAsset = ref.read(assetViewerProvider).currentAsset;
     if (currentAsset == null) {
       ImmichToast.show(context: context, msg: "Cannot load asset information.", toastType: ToastType.error);
       return;
@@ -133,32 +137,44 @@ class _AddActionButtonState extends ConsumerState<AddActionButton> {
   }
 
   Future<void> _addCurrentAssetToAlbum(RemoteAlbum album) async {
-    final latest = ref.read(currentAssetNotifier);
+    final latest = ref.read(assetViewerProvider).currentAsset;
 
     if (latest == null) {
       ImmichToast.show(context: context, msg: "Cannot load asset information.", toastType: ToastType.error);
       return;
     }
 
-    final addedCount = await ref.read(remoteAlbumProvider.notifier).addAssets(album.id, [latest.remoteId!]);
+    final result = await ref.read(actionProvider.notifier).addToAlbum(ActionSource.viewer, album);
 
     if (!context.mounted) {
       return;
     }
 
-    if (addedCount == 0) {
-      ImmichToast.show(
-        context: context,
-        msg: 'add_to_album_bottom_sheet_already_exists'.tr(namedArgs: {'album': album.name}),
-      );
-    } else {
+    if (!result.success) {
+      ImmichToast.show(context: context, msg: 'scaffold_body_error_occurred'.tr(), toastType: ToastType.error);
+      return;
+    }
+
+    // Only report the failure when nothing was added; if some succeeded we show "added".
+    if (result.count > 0) {
       ImmichToast.show(
         context: context,
         msg: 'add_to_album_bottom_sheet_added'.tr(namedArgs: {'album': album.name}),
       );
 
-      // Invalidate using the asset's remote ID to refresh the "Appears in" list
+      // Refresh the "Appears in" list on the asset's info panel.
       ref.invalidate(albumsContainingAssetProvider(latest.remoteId!));
+    } else if (result.failedCount > 0) {
+      ImmichToast.show(
+        context: context,
+        msg: 'assets_cannot_be_added_to_album_count'.t(context: context, args: {'count': result.failedCount}),
+        toastType: ToastType.error,
+      );
+    } else {
+      ImmichToast.show(
+        context: context,
+        msg: 'add_to_album_bottom_sheet_already_exists'.tr(namedArgs: {'album': album.name}),
+      );
     }
 
     if (!context.mounted) {
@@ -169,7 +185,7 @@ class _AddActionButtonState extends ConsumerState<AddActionButton> {
 
   @override
   Widget build(BuildContext context) {
-    final asset = ref.watch(currentAssetNotifier);
+    final asset = ref.watch(assetViewerProvider.select((s) => s.currentAsset));
     if (asset == null) {
       return const SizedBox.shrink();
     }

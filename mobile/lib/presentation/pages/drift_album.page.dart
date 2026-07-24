@@ -37,6 +37,7 @@ class _DriftAlbumsPageState extends ConsumerState<DriftAlbumsPage> {
 
     final scrollView = CustomScrollView(
       controller: _scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         ImmichSliverAppBar(
           snap: false,
@@ -44,8 +45,8 @@ class _DriftAlbumsPageState extends ConsumerState<DriftAlbumsPage> {
           pinned: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.add_rounded, size: 28),
               onPressed: () => context.pushRoute(const DriftCreateAlbumRoute()),
+              icon: const Icon(Icons.add_rounded),
             ),
           ],
           showUploadButton: false,

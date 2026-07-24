@@ -16,13 +16,18 @@ class ScrollToDateEvent extends Event {
 }
 
 // Asset Viewer Events
-class ViewerOpenBottomSheetEvent extends Event {
-  final bool activitiesMode;
-  const ViewerOpenBottomSheetEvent({this.activitiesMode = false});
+class ViewerShowDetailsEvent extends Event {
+  const ViewerShowDetailsEvent();
 }
 
 class ViewerReloadAssetEvent extends Event {
   const ViewerReloadAssetEvent();
+}
+
+class ViewerStackAssetDeletedEvent extends Event {
+  final int stackIndex;
+
+  const ViewerStackAssetDeletedEvent({required this.stackIndex});
 }
 
 // Multi-Select Events

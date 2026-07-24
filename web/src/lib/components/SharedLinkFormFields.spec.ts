@@ -1,5 +1,5 @@
-import { render } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
+import { renderWithTooltips } from '$tests/helpers';
 import SharedLinkFormFields from './SharedLinkFormFields.svelte';
 
 describe('SharedLinkFormFields component', () => {
@@ -7,16 +7,14 @@ describe('SharedLinkFormFields component', () => {
     element instanceof HTMLInputElement ? element.checked : element.getAttribute('aria-checked') === 'true';
 
   it('turns downloads off when metadata is disabled', async () => {
-    const { container } = render(SharedLinkFormFields, {
-      props: {
-        slug: '',
-        password: '',
-        description: '',
-        allowDownload: true,
-        allowUpload: false,
-        showMetadata: true,
-        expiresAt: null,
-      },
+    const { container } = renderWithTooltips(SharedLinkFormFields, {
+      slug: '',
+      password: '',
+      description: '',
+      allowDownload: true,
+      allowUpload: false,
+      showMetadata: true,
+      expiresAt: null,
     });
     const user = userEvent.setup();
 

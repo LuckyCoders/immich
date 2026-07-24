@@ -3,7 +3,7 @@ import { AuthSharedLink } from 'src/database';
 import { AuthDto } from 'src/dtos/auth.dto';
 import { AlbumUserRole, Permission } from 'src/enum';
 import { AccessRepository } from 'src/repositories/access.repository';
-import { setDifference, setIsEqual, setIsSuperset, setUnion } from 'src/utils/set';
+import { areSetsEqual, isSetSuperset, setDifference, setUnion } from 'src/utils/set';
 
 export type GrantedRequest = {
   requested: Permission[];
@@ -15,7 +15,7 @@ export const isGranted = ({ requested, current }: GrantedRequest) => {
     return true;
   }
 
-  return setIsSuperset(new Set(current), new Set(requested));
+  return isSetSuperset(new Set(current), new Set(requested));
 };
 
 export type AccessRequest = {
@@ -36,7 +36,7 @@ export const requireUploadAccess = (auth: AuthDto | null): AuthDto => {
 
 export const requireAccess = async (access: AccessRepository, request: AccessRequest) => {
   const allowedIds = await checkAccess(access, request);
-  if (!setIsEqual(new Set(request.ids), allowedIds)) {
+  if (!areSetsEqual(new Set(request.ids), allowedIds)) {
     throw new BadRequestException(`Not found or no ${request.permission} access`);
   }
 };
@@ -77,11 +77,6 @@ const checkSharedLinkAccess = async (
 
     case Permission.AssetUpload: {
       return sharedLink.allowUpload ? ids : new Set();
-    }
-
-    case Permission.AssetShare: {
-      // TODO: fix this to not use sharedLink.userId for access control
-      return await access.asset.checkOwnerAccess(sharedLink.userId, ids, false);
     }
 
     case Permission.AlbumRead: {
@@ -190,7 +185,13 @@ const checkOtherAccess = async (access: AccessRepository, request: OtherAccessRe
     }
 
     case Permission.AlbumUpdate: {
-      return await access.album.checkOwnerAccess(auth.user.id, ids);
+      const isOwner = await access.album.checkOwnerAccess(auth.user.id, ids);
+      const isShared = await access.album.checkSharedAlbumAccess(
+        auth.user.id,
+        setDifference(ids, isOwner),
+        AlbumUserRole.Editor,
+      );
+      return setUnion(isOwner, isShared);
     }
 
     case Permission.AlbumDelete: {
@@ -198,7 +199,13 @@ const checkOtherAccess = async (access: AccessRepository, request: OtherAccessRe
     }
 
     case Permission.AlbumShare: {
-      return await access.album.checkOwnerAccess(auth.user.id, ids);
+      const isOwner = await access.album.checkOwnerAccess(auth.user.id, ids);
+      const isShared = await access.album.checkSharedAlbumAccess(
+        auth.user.id,
+        setDifference(ids, isOwner),
+        AlbumUserRole.Editor,
+      );
+      return setUnion(isOwner, isShared);
     }
 
     case Permission.AlbumDownload: {
@@ -227,6 +234,11 @@ const checkOtherAccess = async (access: AccessRepository, request: OtherAccessRe
 
     case Permission.ArchiveRead: {
       return ids.has(auth.user.id) ? new Set([auth.user.id]) : new Set();
+    }
+
+    case Permission.DuplicateRead:
+    case Permission.DuplicateDelete: {
+      return access.duplicate.checkOwnerAccess(auth.user.id, ids);
     }
 
     case Permission.AuthDeviceDelete: {

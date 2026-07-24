@@ -48,16 +48,7 @@ final class $$PersonEntityTableReferences
   static i4.$UserEntityTable _ownerIdTable(i0.GeneratedDatabase db) =>
       i5.ReadDatabaseContainer(db)
           .resultSet<i4.$UserEntityTable>('user_entity')
-          .createAlias(
-            i0.$_aliasNameGenerator(
-              i5.ReadDatabaseContainer(
-                db,
-              ).resultSet<i1.$PersonEntityTable>('person_entity').ownerId,
-              i5.ReadDatabaseContainer(
-                db,
-              ).resultSet<i4.$UserEntityTable>('user_entity').id,
-            ),
-          );
+          .createAlias('person_entity__owner_id__user_entity__id');
 
   i4.$$UserEntityTableProcessedTableManager get ownerId {
     final $_column = $_itemColumn<String>('owner_id')!;
@@ -455,6 +446,10 @@ typedef $$PersonEntityTableProcessedTableManager =
       i1.PersonEntityData,
       i0.PrefetchHooks Function({bool ownerId})
     >;
+i0.Index get idxPersonOwnerId => i0.Index(
+  'idx_person_owner_id',
+  'CREATE INDEX IF NOT EXISTS idx_person_owner_id ON person_entity (owner_id)',
+);
 
 class $PersonEntityTable extends i2.PersonEntity
     with i0.TableInfo<$PersonEntityTable, i1.PersonEntityData> {

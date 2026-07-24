@@ -1,6 +1,6 @@
 <script lang="ts">
   import SharedLinkExpiration from '$lib/components/SharedLinkExpiration.svelte';
-  import { Field, Input, PasswordInput, Switch, Text } from '@immich/ui';
+  import { Field, HelperText, Input, PasswordInput, Switch, Text } from '@immich/ui';
   import { t } from 'svelte-i18n';
 
   type Props = {
@@ -11,7 +11,6 @@
     allowUpload: boolean;
     showMetadata: boolean;
     expiresAt: string | null;
-    createdAt?: string;
   };
 
   let {
@@ -22,7 +21,6 @@
     allowUpload = $bindable(),
     showMetadata = $bindable(),
     expiresAt = $bindable(),
-    createdAt,
   }: Props = $props();
 
   $effect(() => {
@@ -32,10 +30,13 @@
   });
 </script>
 
-<div class="flex flex-col gap-4 mt-4">
+<div class="mt-4 flex flex-col gap-4">
   <div>
-    <Field label={$t('custom_url')} description={$t('shared_link_custom_url_description')}>
+    <Field label={$t('shared_link_custom_url_title')} description={$t('shared_link_custom_url_description')}>
       <Input bind:value={slug} autocomplete="off" />
+      {#if slug.includes('/')}
+        <HelperText class="text-warning">{$t('shared_link_custom_url_warning')}</HelperText>
+      {/if}
     </Field>
     {#if slug}
       <Text size="tiny" color="muted" class="pt-2 break-all">/s/{encodeURIComponent(slug)}</Text>
@@ -50,7 +51,7 @@
     <Input bind:value={description} autocomplete="off" />
   </Field>
 
-  <SharedLinkExpiration {createdAt} bind:expiresAt />
+  <SharedLinkExpiration bind:expiresAt />
   <Field label={$t('show_metadata')}>
     <Switch bind:checked={showMetadata} />
   </Field>

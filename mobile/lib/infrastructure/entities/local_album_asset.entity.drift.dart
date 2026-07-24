@@ -41,16 +41,7 @@ final class $$LocalAlbumAssetEntityTableReferences
       i4.ReadDatabaseContainer(db)
           .resultSet<i3.$LocalAssetEntityTable>('local_asset_entity')
           .createAlias(
-            i0.$_aliasNameGenerator(
-              i4.ReadDatabaseContainer(db)
-                  .resultSet<i1.$LocalAlbumAssetEntityTable>(
-                    'local_album_asset_entity',
-                  )
-                  .assetId,
-              i4.ReadDatabaseContainer(
-                db,
-              ).resultSet<i3.$LocalAssetEntityTable>('local_asset_entity').id,
-            ),
+            'local_album_asset_entity__asset_id__local_asset_entity__id',
           );
 
   i3.$$LocalAssetEntityTableProcessedTableManager get assetId {
@@ -75,16 +66,7 @@ final class $$LocalAlbumAssetEntityTableReferences
       i4.ReadDatabaseContainer(db)
           .resultSet<i5.$LocalAlbumEntityTable>('local_album_entity')
           .createAlias(
-            i0.$_aliasNameGenerator(
-              i4.ReadDatabaseContainer(db)
-                  .resultSet<i1.$LocalAlbumAssetEntityTable>(
-                    'local_album_asset_entity',
-                  )
-                  .albumId,
-              i4.ReadDatabaseContainer(
-                db,
-              ).resultSet<i5.$LocalAlbumEntityTable>('local_album_entity').id,
-            ),
+            'local_album_asset_entity__album_id__local_album_entity__id',
           );
 
   i5.$$LocalAlbumEntityTableProcessedTableManager get albumId {
@@ -459,6 +441,10 @@ typedef $$LocalAlbumAssetEntityTableProcessedTableManager =
       i1.LocalAlbumAssetEntityData,
       i0.PrefetchHooks Function({bool assetId, bool albumId})
     >;
+i0.Index get idxLocalAlbumAssetAlbumAsset => i0.Index(
+  'idx_local_album_asset_album_asset',
+  'CREATE INDEX IF NOT EXISTS idx_local_album_asset_album_asset ON local_album_asset_entity (album_id, asset_id)',
+);
 
 class $LocalAlbumAssetEntityTable extends i2.LocalAlbumAssetEntity
     with

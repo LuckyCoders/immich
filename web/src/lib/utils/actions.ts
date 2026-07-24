@@ -1,11 +1,10 @@
-import ToastAction from '$lib/components/ToastAction.svelte';
-import { TimelineManager } from '$lib/managers/timeline-manager/timeline-manager.svelte';
-import type { TimelineAsset } from '$lib/managers/timeline-manager/types';
-import type { StackResponse } from '$lib/utils/asset-utils';
 import { AssetVisibility, deleteAssets as deleteBulk, restoreAssets } from '@immich/sdk';
 import { toastManager } from '@immich/ui';
 import { t } from 'svelte-i18n';
 import { get } from 'svelte/store';
+import { TimelineManager } from '$lib/managers/timeline-manager/timeline-manager.svelte';
+import type { TimelineAsset } from '$lib/managers/timeline-manager/types';
+import type { StackResponse } from '$lib/utils/asset-utils';
 import { handleError } from './handle-error';
 
 export type OnDelete = (assetIds: string[]) => void;
@@ -32,24 +31,15 @@ export const deleteAssets = async (
     await deleteBulk({ assetBulkDeleteDto: { ids, force } });
     onAssetDelete(ids);
 
-    toastManager.custom(
+    toastManager.primary(
       {
-        component: ToastAction,
-        props: {
-          title: $t('success'),
-          description: force
-            ? $t('assets_permanently_deleted_count', { values: { count: ids.length } })
-            : $t('assets_trashed_count', { values: { count: ids.length } }),
-          color: 'success',
-          button:
-            onUndoDelete && !force
-              ? {
-                  color: 'secondary',
-                  text: $t('undo'),
-                  onClick: () => undoDeleteAssets(onUndoDelete, assets),
-                }
-              : undefined,
-        },
+        description: force
+          ? $t('assets_permanently_deleted_count', { values: { count: ids.length } })
+          : $t('assets_trashed_count', { values: { count: ids.length } }),
+        button:
+          onUndoDelete && !force
+            ? { label: $t('undo'), color: 'secondary', onclick: () => undoDeleteAssets(onUndoDelete, assets) }
+            : undefined,
       },
       { timeout: 5000 },
     );
@@ -78,19 +68,21 @@ const undoDeleteAssets = async (onUndoDelete: OnUndoDelete, assets: TimelineAsse
  * @param {StackResponse} stackResponse - The stack response containing the stack and assets to delete.
  */
 export function updateStackedAssetInTimeline(timelineManager: TimelineManager, { stack, toDeleteIds }: StackResponse) {
-  if (stack != undefined) {
-    timelineManager.update(
-      [stack.primaryAssetId],
-      (asset) =>
-        (asset.stack = {
-          id: stack.id,
-          primaryAssetId: stack.primaryAssetId,
-          assetCount: stack.assets.length,
-        }),
-    );
-
-    timelineManager.removeAssets(toDeleteIds);
+  if (stack == undefined) {
+    return;
   }
+
+  timelineManager.update(
+    [stack.primaryAssetId],
+    (asset) =>
+      (asset.stack = {
+        id: stack.id,
+        primaryAssetId: stack.primaryAssetId,
+        assetCount: stack.assets.length,
+      }),
+  );
+
+  timelineManager.removeAssets(toDeleteIds);
 }
 
 /**

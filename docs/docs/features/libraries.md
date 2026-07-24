@@ -50,6 +50,8 @@ Some basic examples:
 - `**/Raw/**` will exclude all files in any directory named `Raw`
 - `**/*.{tif,jpg}` will exclude all files with the extension `.tif` or `.jpg`
 
+Note that `*` is a wildcard matching zero or more characters (i.e., withinin a filename or single directory name). `**` matches zero or more subdirectories, recursively. It also includes any/all files within a subdirectory, i.e., when used at the end of a pattern. For example, `**/exclude_me/**` will exclude all files in any directory named `exclude_me`, as well as all files in any subdirectories of `exclude_me`, recursively.
+
 Special characters such as @ should be escaped, for instance:
 
 - `**/\@eaDir/**` will exclude all files in any directory named `@eaDir`
@@ -79,6 +81,10 @@ In rare cases, the library watcher can hang, preventing Immich from starting up.
 There is an automatic scan job that is scheduled to run once a day. Its schedule is configurable, see [Set Custom Scan Interval](#set-custom-scan-interval).
 
 This job also cleans up any libraries stuck in deletion. It is possible to trigger the cleanup by clicking "Scan all libraries" in the library management page.
+
+### Deleting a Library
+
+When deleting an external library, all assets inside are immediately deleted along with the library. Note that while a library can take a long time to fully delete in the background, it is immediately removed from the library list. If the deletion process is interrupted (for example, due to server restart), it will be cleaned up in the next nightly cron job. The cleanup process can also be manually initiated by clicking the "Scan All Libraries" button in the library list.
 
 ## Usage
 

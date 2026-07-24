@@ -1,8 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:immich_mobile/domain/models/asset/base_asset.model.dart';
 import 'package:immich_mobile/domain/models/person.model.dart';
-import 'package:immich_mobile/entities/asset.entity.dart';
+import 'package:immich_mobile/utils/option.dart';
 
 class SearchLocationFilter {
   String? country;
@@ -36,7 +37,9 @@ class SearchLocationFilter {
 
   @override
   bool operator ==(covariant SearchLocationFilter other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other.country == country && other.state == state && other.city == city;
   }
@@ -75,7 +78,9 @@ class SearchCameraFilter {
 
   @override
   bool operator ==(covariant SearchCameraFilter other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other.make == make && other.model == model;
   }
@@ -117,7 +122,9 @@ class SearchDateFilter {
 
   @override
   bool operator ==(covariant SearchDateFilter other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other.takenBefore == takenBefore && other.takenAfter == takenAfter;
   }
@@ -127,19 +134,26 @@ class SearchDateFilter {
 }
 
 class SearchRatingFilter {
-  int? rating;
-  SearchRatingFilter({this.rating});
+  /// none = no filter; some(null) = filter for unrated; some(1-5) = filter for that rating
+  Option<int?> rating;
+  SearchRatingFilter({this.rating = const Option.none()});
 
-  SearchRatingFilter copyWith({int? rating}) {
+  SearchRatingFilter copyWith({Option<int?>? rating}) {
     return SearchRatingFilter(rating: rating ?? this.rating);
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{'rating': rating};
+    if (rating.isNone) {
+      return <String, dynamic>{'active': false};
+    }
+    return <String, dynamic>{'active': true, 'value': rating.unwrapOrNull};
   }
 
   factory SearchRatingFilter.fromMap(Map<String, dynamic> map) {
-    return SearchRatingFilter(rating: map['rating'] != null ? map['rating'] as int : null);
+    if (!(map['active'] as bool? ?? false)) {
+      return SearchRatingFilter();
+    }
+    return SearchRatingFilter(rating: Option.some(map['value'] as int?));
   }
 
   String toJson() => json.encode(toMap());
@@ -152,7 +166,9 @@ class SearchRatingFilter {
 
   @override
   bool operator ==(covariant SearchRatingFilter other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other.rating == rating;
   }
@@ -198,7 +214,9 @@ class SearchDisplayFilters {
 
   @override
   bool operator ==(covariant SearchDisplayFilters other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other.isNotInAlbum == isNotInAlbum && other.isArchive == isArchive && other.isFavorite == isFavorite;
   }
@@ -214,6 +232,7 @@ class SearchFilter {
   String? ocr;
   String? language;
   String? assetId;
+  List<String>? tagIds;
   Set<PersonDto> people;
   SearchLocationFilter location;
   SearchCameraFilter camera;
@@ -231,6 +250,7 @@ class SearchFilter {
     this.ocr,
     this.language,
     this.assetId,
+    this.tagIds,
     required this.people,
     required this.location,
     required this.camera,
@@ -246,6 +266,7 @@ class SearchFilter {
         (description == null || (description!.isEmpty)) &&
         (assetId == null || (assetId!.isEmpty)) &&
         (ocr == null || (ocr!.isEmpty)) &&
+        (tagIds ?? []).isEmpty &&
         people.isEmpty &&
         location.country == null &&
         location.state == null &&
@@ -257,7 +278,7 @@ class SearchFilter {
         display.isNotInAlbum == false &&
         display.isArchive == false &&
         display.isFavorite == false &&
-        rating.rating == null &&
+        rating.rating.isNone &&
         mediaType == AssetType.other;
   }
 
@@ -269,6 +290,7 @@ class SearchFilter {
     String? ocr,
     String? assetId,
     Set<PersonDto>? people,
+    List<String>? tagIds,
     SearchLocationFilter? location,
     SearchCameraFilter? camera,
     SearchDateFilter? date,
@@ -290,17 +312,20 @@ class SearchFilter {
       display: display ?? this.display,
       rating: rating ?? this.rating,
       mediaType: mediaType ?? this.mediaType,
+      tagIds: tagIds ?? this.tagIds,
     );
   }
 
   @override
   String toString() {
-    return 'SearchFilter(context: $context, filename: $filename, description: $description, language: $language, ocr: $ocr, people: $people, location: $location, camera: $camera, date: $date, display: $display, rating: $rating, mediaType: $mediaType, assetId: $assetId)';
+    return 'SearchFilter(context: $context, filename: $filename, description: $description, language: $language, ocr: $ocr, people: $people, location: $location, tagIds: $tagIds, camera: $camera, date: $date, display: $display, rating: $rating, mediaType: $mediaType, assetId: $assetId)';
   }
 
   @override
   bool operator ==(covariant SearchFilter other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other.context == context &&
         other.filename == filename &&
@@ -309,6 +334,7 @@ class SearchFilter {
         other.ocr == ocr &&
         other.assetId == assetId &&
         other.people == people &&
+        other.tagIds == tagIds &&
         other.location == location &&
         other.camera == camera &&
         other.date == date &&
@@ -326,6 +352,7 @@ class SearchFilter {
         ocr.hashCode ^
         assetId.hashCode ^
         people.hashCode ^
+        tagIds.hashCode ^
         location.hashCode ^
         camera.hashCode ^
         date.hashCode ^

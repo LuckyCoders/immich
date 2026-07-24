@@ -108,10 +108,12 @@ export class TagService extends BaseService {
     );
 
     for (const { id: assetId, success } of results) {
-      if (success) {
-        await this.updateTags(assetId);
-        await this.eventRepository.emit('AssetTag', { assetId });
+      if (!success) {
+        continue;
       }
+
+      await this.updateTags(assetId);
+      await this.eventRepository.emit('AssetTag', { assetId });
     }
 
     return results;
@@ -127,10 +129,12 @@ export class TagService extends BaseService {
     );
 
     for (const { id: assetId, success } of results) {
-      if (success) {
-        await this.updateTags(assetId);
-        await this.eventRepository.emit('AssetUntag', { assetId });
+      if (!success) {
+        continue;
       }
+
+      await this.updateTags(assetId);
+      await this.eventRepository.emit('AssetUntag', { assetId });
     }
 
     return results;
@@ -151,10 +155,10 @@ export class TagService extends BaseService {
   }
 
   private async updateTags(assetId: string) {
-    const asset = await this.assetRepository.getById(assetId, { tags: true });
-    await this.assetRepository.upsertExif(
-      updateLockedColumns({ assetId, tags: asset?.tags?.map(({ value }) => value) ?? [] }),
-      { lockedPropertiesBehavior: 'append' },
-    );
+    const { tags } = await this.assetRepository.getForUpdateTags(assetId);
+    await this.assetRepository.upsertExif({
+      exif: updateLockedColumns({ assetId, tags: tags.map(({ value }) => value) }),
+      lockedPropertiesBehavior: 'append',
+    });
   }
 }

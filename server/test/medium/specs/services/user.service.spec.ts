@@ -47,15 +47,15 @@ describe(UserService.name, () => {
       const { sut, ctx } = setup();
       ctx.getMock(EventRepository).emit.mockResolvedValue();
       const user = mediumFactory.userInsert();
-      await expect(sut.createUser({ email: user.email })).resolves.toMatchObject({ email: user.email });
-      await expect(sut.createUser({ email: user.email })).rejects.toThrow('User exists');
+      await expect(sut.createUser({ name: 'Test', email: user.email })).resolves.toMatchObject({ email: user.email });
+      await expect(sut.createUser({ name: 'Test', email: user.email })).rejects.toThrow('Email is not available');
     });
 
     it('should not return password', async () => {
       const { sut, ctx } = setup();
       ctx.getMock(EventRepository).emit.mockResolvedValue();
       const dto = mediumFactory.userInsert({ password: 'password' });
-      const user = await sut.createUser({ email: dto.email, password: 'password' });
+      const user = await sut.createUser({ name: 'Test', email: dto.email, password: 'password' });
       expect((user as any).password).toBeUndefined();
     });
   });
@@ -126,8 +126,8 @@ describe(UserService.name, () => {
       const after = await sut.setLicense(auth, license);
       expect(after.licenseKey).toEqual(license.licenseKey);
       expect(after.activationKey).toEqual(license.activationKey);
-      const getResponse = await sut.getLicense(auth);
-      expect(getResponse).toEqual(after);
+      const response = await sut.getLicense(auth);
+      expect(response).toEqual(after);
     });
   });
 

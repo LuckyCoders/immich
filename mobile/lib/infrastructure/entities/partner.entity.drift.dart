@@ -39,16 +39,7 @@ final class $$PartnerEntityTableReferences
   static i4.$UserEntityTable _sharedByIdTable(i0.GeneratedDatabase db) =>
       i5.ReadDatabaseContainer(db)
           .resultSet<i4.$UserEntityTable>('user_entity')
-          .createAlias(
-            i0.$_aliasNameGenerator(
-              i5.ReadDatabaseContainer(
-                db,
-              ).resultSet<i1.$PartnerEntityTable>('partner_entity').sharedById,
-              i5.ReadDatabaseContainer(
-                db,
-              ).resultSet<i4.$UserEntityTable>('user_entity').id,
-            ),
-          );
+          .createAlias('partner_entity__shared_by_id__user_entity__id');
 
   i4.$$UserEntityTableProcessedTableManager get sharedById {
     final $_column = $_itemColumn<String>('shared_by_id')!;
@@ -71,16 +62,7 @@ final class $$PartnerEntityTableReferences
   static i4.$UserEntityTable _sharedWithIdTable(i0.GeneratedDatabase db) =>
       i5.ReadDatabaseContainer(db)
           .resultSet<i4.$UserEntityTable>('user_entity')
-          .createAlias(
-            i0.$_aliasNameGenerator(
-              i5.ReadDatabaseContainer(db)
-                  .resultSet<i1.$PartnerEntityTable>('partner_entity')
-                  .sharedWithId,
-              i5.ReadDatabaseContainer(
-                db,
-              ).resultSet<i4.$UserEntityTable>('user_entity').id,
-            ),
-          );
+          .createAlias('partner_entity__shared_with_id__user_entity__id');
 
   i4.$$UserEntityTableProcessedTableManager get sharedWithId {
     final $_column = $_itemColumn<String>('shared_with_id')!;
@@ -440,6 +422,10 @@ typedef $$PartnerEntityTableProcessedTableManager =
       i1.PartnerEntityData,
       i0.PrefetchHooks Function({bool sharedById, bool sharedWithId})
     >;
+i0.Index get idxPartnerSharedWithId => i0.Index(
+  'idx_partner_shared_with_id',
+  'CREATE INDEX IF NOT EXISTS idx_partner_shared_with_id ON partner_entity (shared_with_id)',
+);
 
 class $PartnerEntityTable extends i2.PartnerEntity
     with i0.TableInfo<$PartnerEntityTable, i1.PartnerEntityData> {

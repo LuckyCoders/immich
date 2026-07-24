@@ -1,10 +1,10 @@
-import type { AssetDescriptor, TimelineAsset, ViewportTopMonth } from '$lib/managers/timeline-manager/types';
-import { locale } from '$lib/stores/preferences.store';
-import { getAssetRatio } from '$lib/utils/asset-utils';
-import { AssetTypeEnum, type AssetResponseDto } from '@immich/sdk';
+import { AssetTypeEnum, AssetOrderBy, type AssetResponseDto } from '@immich/sdk';
 import { DateTime, type LocaleOptions } from 'luxon';
 import { SvelteSet } from 'svelte/reactivity';
 import { get } from 'svelte/store';
+import type { AssetDescriptor, TimelineAsset, ViewportTopMonth } from '$lib/managers/timeline-manager/types';
+import { locale } from '$lib/stores/preferences.store';
+import { getAssetRatio } from '$lib/utils/asset-utils';
 
 // Move type definitions to the top
 export type TimelineYearMonth = {
@@ -95,12 +95,12 @@ export const fromTimelinePlainYearMonth = (timelineYearMonth: TimelineYearMonth)
   ) as DateTime<true>;
 
 export const toISOYearMonthUTC = ({ year, month }: TimelineYearMonth): string => {
-  const yearFull = `${year}`.padStart(4, '0');
-  const monthFull = `${month}`.padStart(2, '0');
+  const yearFull = String(year).padStart(4, '0');
+  const monthFull = String(month).padStart(2, '0');
   return `${yearFull}-${monthFull}-01T00:00:00.000Z`;
 };
 
-export function formatMonthGroupTitle(_date: DateTime): string {
+export function formatTimelineMonthTitle(_date: DateTime): string {
   if (!_date.isValid) {
     return _date.toString();
   }
@@ -128,7 +128,7 @@ export function formatGroupTitle(_date: DateTime): string {
 
   // Yesterday
   if (today.minus({ days: 1 }).hasSame(date, 'day')) {
-    return date.toRelativeCalendar({ locale: get(locale) });
+    return date.toRelativeCalendar({ locale: get(locale), unit: 'days' });
   }
 
   // Last week
@@ -165,14 +165,20 @@ export const toTimelineAsset = (unknownAsset: AssetResponseDto | TimelineAsset):
   const people = assetResponse.people?.map((person) => person.name) || [];
 
   const localDateTime = fromISODateTimeUTCToObject(assetResponse.localDateTime);
-  const fileCreatedAt = fromISODateTimeToObject(assetResponse.fileCreatedAt, assetResponse.exifInfo?.timeZone ?? 'UTC');
+  // Keep this consistent with the bucket loader (getTimes), which stores fileCreatedAt as UTC
+  // components. The timeline sorts assets within a day by fileCreatedAt, so a mismatched
+  // representation here would place re-inserted assets (e.g. undo archive) in the wrong spot.
+  const fileCreatedAt = fromISODateTimeUTCToObject(assetResponse.fileCreatedAt);
+  const createdAt = fromISODateTimeUTCToObject(assetResponse.createdAt);
 
   return {
     id: assetResponse.id,
     ownerId: assetResponse.ownerId,
+    tags: assetResponse.tags?.map((tag) => tag.id),
     ratio,
     thumbhash: assetResponse.thumbhash,
     localDateTime,
+    createdAt,
     fileCreatedAt,
     isFavorite: assetResponse.isFavorite,
     visibility: assetResponse.visibility,
@@ -235,3 +241,6 @@ export function setDifference<T>(setA: Set<T>, setB: Set<T>): SvelteSet<T> {
   }
   return result;
 }
+
+export const getOrderingDate = (asset: TimelineAsset, order: AssetOrderBy) =>
+  order === AssetOrderBy.CreatedAt ? asset.createdAt : asset.localDateTime;

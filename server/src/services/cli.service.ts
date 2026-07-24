@@ -1,5 +1,6 @@
+import { schemaDiff } from '@immich/sql-tools';
 import { Injectable } from '@nestjs/common';
-import { isAbsolute } from 'node:path';
+import { isAbsolute, join } from 'node:path';
 import { SALT_ROUNDS } from 'src/constants';
 import { MaintenanceAuthDto } from 'src/dtos/maintenance.dto';
 import { UserAdminResponseDto, mapUserAdmin } from 'src/dtos/user.dto';
@@ -8,24 +9,72 @@ import { BaseService } from 'src/services/base.service';
 import { createMaintenanceLoginUrl, generateMaintenanceSecret } from 'src/utils/maintenance';
 import { getExternalDomain } from 'src/utils/misc';
 
+export type SchemaReport = {
+  migrations: MigrationStatus[];
+  drift: ReturnType<typeof schemaDiff>;
+};
+
+type MigrationStatus = {
+  name: string;
+  status: 'applied' | 'missing' | 'deleted';
+};
+
 @Injectable()
 export class CliService extends BaseService {
+  async schemaReport(): Promise<SchemaReport> {
+    // eslint-disable-next-line unicorn/prefer-module
+    const allFiles = await this.storageRepository.readdir(join(__dirname, '../schema/migrations'));
+    const files = allFiles.filter((file) => file.endsWith('.js')).map((file) => file.slice(0, -3));
+    const rows = await this.databaseRepository.getMigrations();
+    const filesSet = new Set(files);
+    const rowsSet = new Set(rows.map((item) => item.name));
+    const combined = [...filesSet, ...rowsSet].toSorted();
+
+    const migrations: MigrationStatus[] = [];
+
+    for (const name of combined) {
+      if (filesSet.has(name) && rowsSet.has(name)) {
+        migrations.push({ name, status: 'applied' });
+        continue;
+      }
+
+      if (filesSet.has(name) && !rowsSet.has(name)) {
+        migrations.push({ name, status: 'missing' });
+        continue;
+      }
+
+      if (!filesSet.has(name) && rowsSet.has(name)) {
+        migrations.push({ name, status: 'deleted' });
+      }
+    }
+
+    const drift = await this.databaseRepository.getSchemaDrift();
+
+    return { migrations, drift };
+  }
+
   async listUsers(): Promise<UserAdminResponseDto[]> {
     const users = await this.userRepository.getList({ withDeleted: true });
     return users.map((user) => mapUserAdmin(user));
   }
 
-  async resetAdminPassword(ask: (admin: UserAdminResponseDto) => Promise<string | undefined>) {
+  async resetAdminPassword(
+    ask: (admin: UserAdminResponseDto) => Promise<{ newPassword: string | undefined; invalidateSessions: boolean }>,
+  ) {
     const admin = await this.userRepository.getAdmin();
     if (!admin) {
       throw new Error('Admin account does not exist');
     }
 
-    const providedPassword = await ask(mapUserAdmin(admin));
+    const { newPassword: providedPassword, invalidateSessions } = await ask(mapUserAdmin(admin));
     const password = providedPassword || this.cryptoRepository.randomBytesAsText(24);
     const hashedPassword = await this.cryptoRepository.hashBcrypt(password, SALT_ROUNDS);
 
     await this.userRepository.update(admin.id, { password: hashedPassword });
+
+    if (invalidateSessions) {
+      await this.sessionRepository.invalidateAll({ userId: admin.id });
+    }
 
     return { admin, password, provided: !!providedPassword };
   }
@@ -43,9 +92,9 @@ export class CliService extends BaseService {
   }
 
   async disableMaintenanceMode(): Promise<{ alreadyDisabled: boolean }> {
-    const currentState = await this.systemMetadataRepository
-      .get(SystemMetadataKey.MaintenanceMode)
-      .then((state) => state ?? { isMaintenanceMode: false as const });
+    const currentState = (await this.systemMetadataRepository.get(SystemMetadataKey.MaintenanceMode)) ?? {
+      isMaintenanceMode: false as const,
+    };
 
     if (!currentState.isMaintenanceMode) {
       return {
@@ -70,9 +119,9 @@ export class CliService extends BaseService {
       username: 'cli-admin',
     };
 
-    const state = await this.systemMetadataRepository
-      .get(SystemMetadataKey.MaintenanceMode)
-      .then((state) => state ?? { isMaintenanceMode: false as const });
+    const state = (await this.systemMetadataRepository.get(SystemMetadataKey.MaintenanceMode)) ?? {
+      isMaintenanceMode: false as const,
+    };
 
     if (state.isMaintenanceMode) {
       return {
@@ -138,11 +187,7 @@ export class CliService extends BaseService {
       this.userRepository.getFileSamples(),
     ]);
 
-    const paths = [];
-
-    for (const person of people) {
-      paths.push(person.thumbnailPath);
-    }
+    const paths = Array.from(people, (person) => person.thumbnailPath);
 
     for (const user of users) {
       paths.push(user.profileImagePath);

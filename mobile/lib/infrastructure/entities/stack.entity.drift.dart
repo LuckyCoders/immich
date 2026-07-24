@@ -38,16 +38,7 @@ final class $$StackEntityTableReferences
   static i4.$UserEntityTable _ownerIdTable(i0.GeneratedDatabase db) =>
       i5.ReadDatabaseContainer(db)
           .resultSet<i4.$UserEntityTable>('user_entity')
-          .createAlias(
-            i0.$_aliasNameGenerator(
-              i5.ReadDatabaseContainer(
-                db,
-              ).resultSet<i1.$StackEntityTable>('stack_entity').ownerId,
-              i5.ReadDatabaseContainer(
-                db,
-              ).resultSet<i4.$UserEntityTable>('user_entity').id,
-            ),
-          );
+          .createAlias('stack_entity__owner_id__user_entity__id');
 
   i4.$$UserEntityTableProcessedTableManager get ownerId {
     final $_column = $_itemColumn<String>('owner_id')!;
@@ -357,6 +348,10 @@ typedef $$StackEntityTableProcessedTableManager =
       i1.StackEntityData,
       i0.PrefetchHooks Function({bool ownerId})
     >;
+i0.Index get idxStackPrimaryAssetId => i0.Index(
+  'idx_stack_primary_asset_id',
+  'CREATE INDEX IF NOT EXISTS idx_stack_primary_asset_id ON stack_entity (primary_asset_id)',
+);
 
 class $StackEntityTable extends i2.StackEntity
     with i0.TableInfo<$StackEntityTable, i1.StackEntityData> {

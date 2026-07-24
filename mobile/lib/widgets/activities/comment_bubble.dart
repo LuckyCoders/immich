@@ -29,19 +29,21 @@ class CommentBubble extends ConsumerWidget {
     final bgColor = isOwn ? context.colorScheme.primaryContainer : context.colorScheme.surfaceContainer;
 
     final activityNotifier = ref.read(
-      albumActivityProvider(album.id, isAssetActivity ? activity.assetId : null).notifier,
+      albumActivityProvider((album.id, isAssetActivity ? activity.assetId : null)).notifier,
     );
 
     Future<void> openAssetViewer() async {
       final activityService = ref.read(activityServiceProvider);
       final route = await activityService.buildAssetViewerRoute(activity.assetId!, ref);
-      if (route != null) await context.pushRoute(route);
+      if (route != null) {
+        await context.pushRoute(route);
+      }
     }
 
     // avatar (hidden for own messages)
     Widget avatar = const SizedBox.shrink();
     if (!isOwn) {
-      avatar = UserCircleAvatar(user: activity.user, size: 28, radius: 14);
+      avatar = UserCircleAvatar(user: activity.user, size: 28);
     }
 
     // Thumbnail with tappable behavior and optional heart overlay

@@ -39,16 +39,7 @@ final class $$RemoteAlbumAssetEntityTableReferences
       i4.ReadDatabaseContainer(db)
           .resultSet<i3.$RemoteAssetEntityTable>('remote_asset_entity')
           .createAlias(
-            i0.$_aliasNameGenerator(
-              i4.ReadDatabaseContainer(db)
-                  .resultSet<i1.$RemoteAlbumAssetEntityTable>(
-                    'remote_album_asset_entity',
-                  )
-                  .assetId,
-              i4.ReadDatabaseContainer(
-                db,
-              ).resultSet<i3.$RemoteAssetEntityTable>('remote_asset_entity').id,
-            ),
+            'remote_album_asset_entity__asset_id__remote_asset_entity__id',
           );
 
   i3.$$RemoteAssetEntityTableProcessedTableManager get assetId {
@@ -73,16 +64,7 @@ final class $$RemoteAlbumAssetEntityTableReferences
       i4.ReadDatabaseContainer(db)
           .resultSet<i5.$RemoteAlbumEntityTable>('remote_album_entity')
           .createAlias(
-            i0.$_aliasNameGenerator(
-              i4.ReadDatabaseContainer(db)
-                  .resultSet<i1.$RemoteAlbumAssetEntityTable>(
-                    'remote_album_asset_entity',
-                  )
-                  .albumId,
-              i4.ReadDatabaseContainer(
-                db,
-              ).resultSet<i5.$RemoteAlbumEntityTable>('remote_album_entity').id,
-            ),
+            'remote_album_asset_entity__album_id__remote_album_entity__id',
           );
 
   i5.$$RemoteAlbumEntityTableProcessedTableManager get albumId {
@@ -441,6 +423,10 @@ typedef $$RemoteAlbumAssetEntityTableProcessedTableManager =
       i1.RemoteAlbumAssetEntityData,
       i0.PrefetchHooks Function({bool assetId, bool albumId})
     >;
+i0.Index get idxRemoteAlbumAssetAlbumAsset => i0.Index(
+  'idx_remote_album_asset_album_asset',
+  'CREATE INDEX IF NOT EXISTS idx_remote_album_asset_album_asset ON remote_album_asset_entity (album_id, asset_id)',
+);
 
 class $RemoteAlbumAssetEntityTable extends i2.RemoteAlbumAssetEntity
     with
