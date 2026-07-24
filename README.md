@@ -47,6 +47,8 @@
 
 > [!NOTE]
 > You can find the main documentation, including installation guides, at https://immich.app/.
+>
+> **This repository is a fork** ([LuckyCoders/immich](https://github.com/LuckyCoders/immich)). Fork-specific plans (including optional TOTP / passkeys): [FORK_ROADMAP.md](./FORK_ROADMAP.md).
 
 ## Links
 
@@ -54,6 +56,7 @@
 - [About](https://docs.immich.app/overview/introduction)
 - [Installation](https://docs.immich.app/install/requirements)
 - [Roadmap](https://immich.app/roadmap)
+- [Fork roadmap](./FORK_ROADMAP.md)
 - [Demo](#demo)
 - [Features](#features)
 - [Translations](https://docs.immich.app/developer/translations)
