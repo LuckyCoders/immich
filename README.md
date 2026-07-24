@@ -1,19 +1,3 @@
-<p align="center"> 
-  <br/>
-  <a href="https://opensource.org/license/agpl-v3"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg?color=3F51B5&style=for-the-badge&label=License&logoColor=000000&labelColor=ececec" alt="License: AGPLv3"></a>
-  <a href="https://discord.immich.app">
-    <img src="https://img.shields.io/discord/979116623879368755.svg?label=Discord&logo=Discord&style=for-the-badge&logoColor=000000&labelColor=ececec" alt="Discord"/>
-  </a>
-  <br/>
-  <br/>
-</p>
-
-<p align="center">
-<img src="design/immich-logo-stacked-light.svg" width="300" title="Login With Custom URL">
-</p>
-<h3 align="center">High performance self-hosted photo and video management solution</h3>
-
----
 
 ## LuckyCoders fork — what this is
 
@@ -39,6 +23,24 @@ Full plan: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**.
 | Partial | Null `bucket_date` crash + personal APK | branch `build/personal-apk-widget-nullbucket` |
 
 Below is the original Immich README (upstream docs and features).
+
+
+---
+<p align="center"> 
+  <br/>
+  <a href="https://opensource.org/license/agpl-v3"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg?color=3F51B5&style=for-the-badge&label=License&logoColor=000000&labelColor=ececec" alt="License: AGPLv3"></a>
+  <a href="https://discord.immich.app">
+    <img src="https://img.shields.io/discord/979116623879368755.svg?label=Discord&logo=Discord&style=for-the-badge&logoColor=000000&labelColor=ececec" alt="Discord"/>
+  </a>
+  <br/>
+  <br/>
+</p>
+
+<p align="center">
+<img src="design/immich-logo-stacked-light.svg" width="300" title="Login With Custom URL">
+</p>
+<h3 align="center">High performance self-hosted photo and video management solution</h3>
+
 
 ---
 
