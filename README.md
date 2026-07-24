@@ -39,24 +39,29 @@
   <a href="readme_i18n/README_th_TH.md">ภาษาไทย</a>
 </p>
 
+> [!IMPORTANT]
+> **Это форк** ([LuckyCoders/immich](https://github.com/LuckyCoders/immich)), не официальный Immich.
+>
+> Upstream-мейнтейнеры **намеренно не делают** встроенный безопасный вход и отсылают к OAuth/OIDC («auth держим простым»). В этом форке как раз хотим то, что они абстрагируют / выносят наружу:
+>
+> - **TOTP / 2FA** — подтверждение входа кодом из аутентификатора
+> - **Passkeys / WebAuthn** — вход ключом браузера / аппаратным ключом (KeyPass, YubiKey, …)
+>
+> Подробности и бэклог: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**. Upstream-треды: [2FA #8175](https://github.com/immich-app/immich/discussions/8175), [Passkeys #3338](https://github.com/immich-app/immich/discussions/3338).
 
 > [!WARNING]
 > ⚠️ Always follow [3-2-1](https://www.backblaze.com/blog/the-3-2-1-backup-strategy/) backup plan for your precious photos and videos!
-> 
- 
 
 > [!NOTE]
-> You can find the main documentation, including installation guides, at https://immich.app/.
->
-> **This repository is a fork** ([LuckyCoders/immich](https://github.com/LuckyCoders/immich)). Fork-specific plans (including optional TOTP / passkeys): [FORK_ROADMAP.md](./FORK_ROADMAP.md).
+> Main Immich documentation and installation guides: https://immich.app/
 
 ## Links
 
 - [Documentation](https://docs.immich.app/)
 - [About](https://docs.immich.app/overview/introduction)
 - [Installation](https://docs.immich.app/install/requirements)
-- [Roadmap](https://immich.app/roadmap)
-- [Fork roadmap](./FORK_ROADMAP.md)
+- [Upstream roadmap](https://immich.app/roadmap)
+- [**Fork roadmap** (TOTP, passkeys, …)](./FORK_ROADMAP.md)
 - [Demo](#demo)
 - [Features](#features)
 - [Translations](https://docs.immich.app/developer/translations)
