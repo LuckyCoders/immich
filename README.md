@@ -12,7 +12,36 @@
 <img src="design/immich-logo-stacked-light.svg" width="300" title="Login With Custom URL">
 </p>
 <h3 align="center">High performance self-hosted photo and video management solution</h3>
-<br/>
+
+---
+
+## Fork LuckyCoders — что это и зачем
+
+**Это форк** ([LuckyCoders/immich](https://github.com/LuckyCoders/immich)), не официальный [immich-app/immich](https://github.com/immich-app/immich).
+
+Upstream-мейнтейнеры **намеренно не делают** встроенный безопасный вход и отсылают к OAuth/OIDC («auth держим простым», см. [#8175](https://github.com/immich-app/immich/discussions/8175), [#3338](https://github.com/immich-app/immich/discussions/3338), [#15719](https://github.com/immich-app/immich/discussions/15719)). В этом форке хотим как раз то, что они абстрагируют / выносят наружу:
+
+| Статус | Фича | Описание |
+|--------|------|----------|
+| Planned | **TOTP / 2FA** | Подтверждение входа кодом из аутентификатора |
+| Planned | **Passkeys / WebAuthn** | Вход ключом браузера / аппаратным ключом (KeyPass, YubiKey, …) |
+
+Полный план: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**.
+
+### Планы / правки форка
+
+| Статус | Что | Ссылки |
+|--------|-----|--------|
+| Planned | TOTP + Passkeys (встроенный MFA) | [FORK_ROADMAP](./FORK_ROADMAP.md), комментарий [upstream #3338](https://github.com/immich-app/immich/discussions/3338#discussioncomment-17764669) |
+| Upstream PR | Widget / deep-link: L/R по ленте с виджета | [immich#30156](https://github.com/immich-app/immich/pull/30156) |
+| Proposed upstream | Screenshots: детект + hide из ленты + коллекция | [immich#14449](https://github.com/immich-app/immich/discussions/14449) |
+| Proposed upstream | Mobile: Merge people UI | [immich#30154](https://github.com/immich-app/immich/discussions/30154) |
+| Partial | Null `bucket_date` crash + personal APK | ветка `build/personal-apk-widget-nullbucket` |
+
+Ниже — оригинальный README Immich (документация, фичи upstream).
+
+---
+
 <a href="https://immich.app">
 <img src="design/immich-screenshots.png" title="Main Screenshot">
 </a>
@@ -39,29 +68,19 @@
   <a href="readme_i18n/README_th_TH.md">ภาษาไทย</a>
 </p>
 
-> [!IMPORTANT]
-> **Это форк** ([LuckyCoders/immich](https://github.com/LuckyCoders/immich)), не официальный Immich.
->
-> Upstream-мейнтейнеры **намеренно не делают** встроенный безопасный вход и отсылают к OAuth/OIDC («auth держим простым»). В этом форке как раз хотим то, что они абстрагируют / выносят наружу:
->
-> - **TOTP / 2FA** — подтверждение входа кодом из аутентификатора
-> - **Passkeys / WebAuthn** — вход ключом браузера / аппаратным ключом (KeyPass, YubiKey, …)
->
-> Подробности и бэклог: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**. Upstream-треды: [2FA #8175](https://github.com/immich-app/immich/discussions/8175), [Passkeys #3338](https://github.com/immich-app/immich/discussions/3338).
-
 > [!WARNING]
 > ⚠️ Always follow [3-2-1](https://www.backblaze.com/blog/the-3-2-1-backup-strategy/) backup plan for your precious photos and videos!
 
 > [!NOTE]
-> Main Immich documentation and installation guides: https://immich.app/
+> You can find the main documentation, including installation guides, at https://immich.app/.
 
 ## Links
 
 - [Documentation](https://docs.immich.app/)
 - [About](https://docs.immich.app/overview/introduction)
 - [Installation](https://docs.immich.app/install/requirements)
-- [Upstream roadmap](https://immich.app/roadmap)
-- [**Fork roadmap** (TOTP, passkeys, …)](./FORK_ROADMAP.md)
+- [Roadmap](https://immich.app/roadmap)
+- [Fork roadmap](./FORK_ROADMAP.md)
 - [Demo](#demo)
 - [Features](#features)
 - [Translations](https://docs.immich.app/developer/translations)
