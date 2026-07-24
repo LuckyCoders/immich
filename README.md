@@ -15,30 +15,30 @@
 
 ---
 
-## Fork LuckyCoders — что это и зачем
+## LuckyCoders fork — what this is
 
-**Это форк** ([LuckyCoders/immich](https://github.com/LuckyCoders/immich)), не официальный [immich-app/immich](https://github.com/immich-app/immich).
+**This is a fork** ([LuckyCoders/immich](https://github.com/LuckyCoders/immich)), not the official [immich-app/immich](https://github.com/immich-app/immich) project.
 
-Upstream-мейнтейнеры **намеренно не делают** встроенный безопасный вход и отсылают к OAuth/OIDC («auth держим простым», см. [#8175](https://github.com/immich-app/immich/discussions/8175), [#3338](https://github.com/immich-app/immich/discussions/3338), [#15719](https://github.com/immich-app/immich/discussions/15719)). В этом форке хотим как раз то, что они абстрагируют / выносят наружу:
+Upstream maintainers **intentionally do not ship** built-in stronger login and push advanced MFA to OAuth/OIDC (“keep auth as simple as possible”; see [#8175](https://github.com/immich-app/immich/discussions/8175), [#3338](https://github.com/immich-app/immich/discussions/3338), [#15719](https://github.com/immich-app/immich/discussions/15719)). This fork aims to build what they abstract away / leave to external IdPs:
 
-| Статус | Фича | Описание |
-|--------|------|----------|
-| Planned | **TOTP / 2FA** | Подтверждение входа кодом из аутентификатора |
-| Planned | **Passkeys / WebAuthn** | Вход ключом браузера / аппаратным ключом (KeyPass, YubiKey, …) |
+| Status | Feature | Description |
+|--------|---------|-------------|
+| Planned | **TOTP / 2FA** | Confirm login with an authenticator app code |
+| Planned | **Passkeys / WebAuthn** | Sign in with a browser or hardware key (KeyPass, YubiKey, …) |
 
-Полный план: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**.
+Full plan: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**.
 
-### Планы / правки форка
+### Fork plans / work
 
-| Статус | Что | Ссылки |
-|--------|-----|--------|
-| Planned | TOTP + Passkeys (встроенный MFA) | [FORK_ROADMAP](./FORK_ROADMAP.md), комментарий [upstream #3338](https://github.com/immich-app/immich/discussions/3338#discussioncomment-17764669) |
-| Upstream PR | Widget / deep-link: L/R по ленте с виджета | [immich#30156](https://github.com/immich-app/immich/pull/30156) |
-| Proposed upstream | Screenshots: детект + hide из ленты + коллекция | [immich#14449](https://github.com/immich-app/immich/discussions/14449) |
+| Status | Item | Links |
+|--------|------|-------|
+| Planned | TOTP + Passkeys (built-in MFA) | [FORK_ROADMAP](./FORK_ROADMAP.md), comment on [upstream #3338](https://github.com/immich-app/immich/discussions/3338#discussioncomment-17764669) |
+| Upstream PR | Widget / deep-link: swipe L/R from the timeline | [immich#30156](https://github.com/immich-app/immich/pull/30156) |
+| Proposed upstream | Screenshots: detect + hide from timeline + collection | [immich#14449](https://github.com/immich-app/immich/discussions/14449) |
 | Proposed upstream | Mobile: Merge people UI | [immich#30154](https://github.com/immich-app/immich/discussions/30154) |
-| Partial | Null `bucket_date` crash + personal APK | ветка `build/personal-apk-widget-nullbucket` |
+| Partial | Null `bucket_date` crash + personal APK | branch `build/personal-apk-widget-nullbucket` |
 
-Ниже — оригинальный README Immich (документация, фичи upstream).
+Below is the original Immich README (upstream docs and features).
 
 ---
 

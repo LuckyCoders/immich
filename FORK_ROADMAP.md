@@ -1,41 +1,41 @@
 # Fork roadmap (LuckyCoders / Immich)
 
-Планы **этого форка**, отдельно от [upstream Immich roadmap](https://immich.app/roadmap).
+Plans for **this fork**, separate from the [upstream Immich roadmap](https://immich.app/roadmap).
 
-Upstream сознательно **не** добавляет встроенный 2FA / passkeys (см. [discussion #8175](https://github.com/immich-app/immich/discussions/8175), [#3338](https://github.com/immich-app/immich/discussions/3338), [#15719](https://github.com/immich-app/immich/discussions/15719)) и предлагает OAuth/OIDC. Здесь фиксируем то, что хотим иметь **в форке** для своей инстанции.
+Upstream deliberately **does not** add built-in 2FA / passkeys (see [discussion #8175](https://github.com/immich-app/immich/discussions/8175), [#3338](https://github.com/immich-app/immich/discussions/3338), [#15719](https://github.com/immich-app/immich/discussions/15719)) and recommends OAuth/OIDC instead. This document tracks what we want **in the fork** for our own instance.
 
-## Auth / безопасность входа
+## Auth / login security
 
-| Статус | Фича | Описание |
-|--------|------|----------|
-| Planned | **TOTP (2FA)** | Опциональное подтверждение входа кодом из аутентификатора (Google Authenticator, Aegis, Bitwarden, …) |
-| Planned | **Passkeys / WebAuthn** | Вход через ключ браузера / аппаратный ключ (KeyPass, YubiKey, Windows Hello, …) |
+| Status | Feature | Description |
+|--------|---------|-------------|
+| Planned | **TOTP (2FA)** | Optional login confirmation with an authenticator app code (Google Authenticator, Aegis, Bitwarden, …) |
+| Planned | **Passkeys / WebAuthn** | Sign in with a browser or hardware key (KeyPass, YubiKey, Windows Hello, …) |
 
-Цели:
+Goals:
 
-- не полагаться только на пароль Immich для публично доступного инстанса;
-- не обязательно поднимать полный IdP (Authentik / Authelia), если хочется лёгкий встроенный MFA;
-- функции опциональные (выключены по умолчанию).
+- do not rely on Immich password alone for a publicly reachable instance;
+- avoid requiring a full IdP (Authentik / Authelia) when lightweight built-in MFA is enough;
+- features stay optional (off by default).
 
-Связанный комментарий upstream: [immich#3338](https://github.com/immich-app/immich/discussions/3338#discussioncomment-17764669).
+Related upstream comment: [immich#3338](https://github.com/immich-app/immich/discussions/3338#discussioncomment-17764669).
 
-### Возможные этапы (черновик)
+### Suggested stages (draft)
 
-1. Server: модели TOTP secret / WebAuthn credentials, API enroll + verify при login.
-2. Web: UI настройки в Account / Security + challenge на login.
-3. Mobile: поддержка TOTP при password login; passkeys — по возможности платформы.
-4. Docs: как включить, бэкап recovery codes.
+1. Server: TOTP secret / WebAuthn credential models; enroll + verify APIs at login.
+2. Web: Account / Security settings UI + login challenge.
+3. Mobile: TOTP on password login; passkeys where the platform allows.
+4. Docs: how to enable; recovery codes backup.
 
-## Другие идеи форка (бэклог)
+## Other fork ideas (backlog)
 
-| Статус | Фича | Заметки |
-|--------|------|---------|
-| In progress / partial | Null `bucket_date` + personal APK | Photos tab crash fix; сборка через Actions |
+| Status | Feature | Notes |
+|--------|---------|-------|
+| In progress / partial | Null `bucket_date` + personal APK | Photos tab crash fix; build via Actions |
 | Upstream PR | Widget / asset deep-link L/R | [immich#30156](https://github.com/immich-app/immich/pull/30156) |
-| Proposed upstream | Screenshots collection + hide from timeline | Комментарий в [immich#14449](https://github.com/immich-app/immich/discussions/14449) |
+| Proposed upstream | Screenshots collection + hide from timeline | Comment on [immich#14449](https://github.com/immich-app/immich/discussions/14449) |
 | Proposed upstream | Mobile: Merge people UI | [immich#30154](https://github.com/immich-app/immich/discussions/30154) |
-| Later | Mobile merge people implementation | API уже есть; UI в приложении |
+| Later | Mobile merge people implementation | API already exists; app UI pending |
 
-## Вне скоупа этого файла
+## Out of scope here
 
-Граф «кто с кем чаще на фото» — личный эксперимент, не цель Immich-форка.
+Face co-occurrence graph (“who appears with whom”) — personal experiment, not a fork Immich goal.
