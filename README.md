@@ -14,13 +14,15 @@ Full plan: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**.
 
 ### Pull requests sent upstream ([immich-app/immich](https://github.com/immich-app/immich))
 
-| PR | Feature / work | State |
-|----|----------------|-------|
-| [#30156](https://github.com/immich-app/immich/pull/30156) | **Widget / asset deep-link** — open main timeline so L/R swipe works (`Fixes #20289`) | Open |
-| [#26026](https://github.com/immich-app/immich/pull/26026) | **Chunked upload** — bypass Cloudflare / reverse-proxy 100MB `413` limit | Closed |
-| [#24338](https://github.com/immich-app/immich/pull/24338) | **Metadata retry** for cloud storage | Closed |
-| [#23892](https://github.com/immich-app/immich/pull/23892) | **Security enhancements** | Closed |
-| [#23887](https://github.com/immich-app/immich/pull/23887) | **Album management** and file upload limits | Closed |
+Legend: ✅ accepted / merged upstream · 🟡 not accepted (closed or still open)
+
+| | PR | Feature / work | Upstream |
+|-|----|----------------|----------|
+| 🟡 | [#30156](https://github.com/immich-app/immich/pull/30156) | **Widget / asset deep-link** — open main timeline so L/R swipe works (`Fixes #20289`) | Open (pending) |
+| 🟡 | [#26026](https://github.com/immich-app/immich/pull/26026) | **Chunked upload** — bypass Cloudflare / reverse-proxy 100MB `413` limit | Not accepted |
+| 🟡 | [#24338](https://github.com/immich-app/immich/pull/24338) | **Metadata retry** for cloud storage | Not accepted |
+| 🟡 | [#23892](https://github.com/immich-app/immich/pull/23892) | **Security enhancements** | Not accepted |
+| 🟡 | [#23887](https://github.com/immich-app/immich/pull/23887) | **Album management** and file upload limits | Not accepted |
 
 ### Upstream discussions opened
 
@@ -33,12 +35,12 @@ Full plan: **[FORK_ROADMAP.md](./FORK_ROADMAP.md)**.
 
 ### Fork PRs (merged into this repo)
 
-| PR | Feature / work | Merge |
-|----|----------------|-------|
-| [#5](https://github.com/LuckyCoders/immich/pull/5) | Chunked upload (Cloudflare / proxy limits) | `491ed62` |
-| [#4](https://github.com/LuckyCoders/immich/pull/4) | Metadata retry for cloud storage | `fae9231` |
-| [#3](https://github.com/LuckyCoders/immich/pull/3) | Security audit, fixes, docs | `0826b9b` |
-| [#2](https://github.com/LuckyCoders/immich/pull/2) / [#1](https://github.com/LuckyCoders/immich/pull/1) | Album management and file upload limits | `de35c0d` / `41d4482` |
+| | PR | Feature / work | Merge |
+|-|----|----------------|-------|
+| ✅ | [#5](https://github.com/LuckyCoders/immich/pull/5) | Chunked upload (Cloudflare / proxy limits) | `491ed62` |
+| ✅ | [#4](https://github.com/LuckyCoders/immich/pull/4) | Metadata retry for cloud storage | `fae9231` |
+| ✅ | [#3](https://github.com/LuckyCoders/immich/pull/3) | Security audit, fixes, docs | `0826b9b` |
+| ✅ | [#2](https://github.com/LuckyCoders/immich/pull/2) / [#1](https://github.com/LuckyCoders/immich/pull/1) | Album management and file upload limits | `de35c0d` / `41d4482` |
 
 ### Key commits by feature (this fork)
 
